@@ -1,13 +1,13 @@
 // Portado de tp_ig/src/components/PostCard/PostCard.tsx (TP web con Facu Peri):
-// misma lógica (useState local para el like, toggleLike que suma/resta y togglea
-// el booleano), pero en JSX/StyleSheet de RN en vez de HTML/CSS.
-// Acá el botón de like va en su propio Pressable anidado, así el sistema de
+// misma estructura JSX/StyleSheet, pero acá es un componente CONTROLADO — el
+// estado de like vive en PostsContext (así queda sincronizado entre el feed y
+// app/post/[id].tsx), no en un useState local como en el original.
+// El botón de like va en su propio Pressable anidado, así el sistema de
 // gestos de RN lo captura sin que dispare el onPress de la card (no hace
 // falta un stopPropagation manual como en el DOM).
 
 import { Feather, Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import { useState } from 'react';
 import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { Colors } from '@/constants/colors';
@@ -15,18 +15,13 @@ import type { Post } from '@/types';
 
 interface PostCardProps {
   post: Post;
+  liked: boolean;
+  likesCount: number;
+  onToggleLike: () => void;
   onPress: () => void;
 }
 
-export function PostCard({ post, onPress }: PostCardProps) {
-  const [liked, setLiked] = useState(post.liked);
-  const [likesCount, setLikesCount] = useState(post.likes);
-
-  const toggleLike = () => {
-    setLikesCount((current) => (liked ? current - 1 : current + 1));
-    setLiked((current) => !current);
-  };
-
+export function PostCard({ post, liked, likesCount, onToggleLike, onPress }: PostCardProps) {
   return (
     <TouchableOpacity activeOpacity={0.9} onPress={onPress} style={styles.card}>
       <View style={styles.header}>
@@ -40,7 +35,7 @@ export function PostCard({ post, onPress }: PostCardProps) {
       <Image source={{ uri: post.imageUrl }} style={styles.image} contentFit="cover" />
 
       <View style={styles.actions}>
-        <Pressable hitSlop={8} onPress={toggleLike} style={styles.actionButton}>
+        <Pressable hitSlop={8} onPress={onToggleLike} style={styles.actionButton}>
           {liked ? (
             <Ionicons name="heart" size={26} color={Colors.accent} />
           ) : (

@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "Bash(export SystemRoot='C:\\\\Windows')",
+      "Bash(npm start *)",
+      "Bash(kill %1)",
+      "Bash(npx expo *)"
     ]
   }
 }

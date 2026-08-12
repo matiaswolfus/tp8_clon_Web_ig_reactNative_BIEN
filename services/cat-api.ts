@@ -5,7 +5,7 @@
 
 import axios from 'axios';
 
-import { CAPTIONS, LOCATIONS, USERNAMES } from '@/data/mock-content';
+import { CAPTIONS, INITIAL_COMMENTS, LOCATIONS, USERNAMES } from '@/data/mock-content';
 import type { CatImage, Post } from '@/types';
 
 const CAT_API_URL = 'https://api.thecatapi.com/v1/images/search';
@@ -41,6 +41,6 @@ export function buildPost(image: CatImage, index: number, options: BuildPostOpti
     likes: Math.floor(Math.random() * (likesMax - likesMin)) + likesMin,
     liked: false,
     date: '2024-06-10',
-    comments: [],
+    comments: INITIAL_COMMENTS,
   };
 }
