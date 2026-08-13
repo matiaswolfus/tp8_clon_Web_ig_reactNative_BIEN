@@ -22,7 +22,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { CommentItem } from '@/components/comment-item';
+import { CommentItem } from '@/components/CommentItem';
 import { Colors } from '@/constants/colors';
 import { usePosts } from '@/context/posts-context';
 import { loggedUser } from '@/data/user';
@@ -77,7 +77,7 @@ export default function PostDetailScreen() {
         <FlatList
           data={post.comments}
           keyExtractor={(comment) => comment.id}
-          renderItem={({ item }) => <CommentItem comment={item} />}
+          renderItem={({ item }) => <CommentItem comentario={item} />}
           ListHeaderComponent={
             <View>
               <View style={styles.header}>

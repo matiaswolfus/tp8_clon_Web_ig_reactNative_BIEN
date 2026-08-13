@@ -13,17 +13,17 @@ import { Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-nativ
 import { Colors } from '@/constants/colors';
 import type { Post } from '@/types';
 
-interface PostCardProps {
+interface PropiedadesPostCard {
   post: Post;
-  liked: boolean;
-  likesCount: number;
-  onToggleLike: () => void;
-  onPress: () => void;
+  DiMegusta: boolean;
+  cantidadLikes: number;
+  alTocarLike: () => void;
+  alClickear: () => void;
 }
 
-export function PostCard({ post, liked, likesCount, onToggleLike, onPress }: PostCardProps) {
+export function PostCard({ post, DiMegusta, cantidadLikes, alTocarLike, alClickear }: PropiedadesPostCard) {
   return (
-    <TouchableOpacity activeOpacity={0.9} onPress={onPress} style={styles.card}>
+    <TouchableOpacity activeOpacity={0.9} onPress={alClickear} style={styles.card}>
       <View style={styles.header}>
         <Image source={{ uri: post.userAvatar }} style={styles.avatar} />
         <View>
@@ -35,14 +35,14 @@ export function PostCard({ post, liked, likesCount, onToggleLike, onPress }: Pos
       <Image source={{ uri: post.imageUrl }} style={styles.image} contentFit="cover" />
 
       <View style={styles.actions}>
-        <Pressable hitSlop={8} onPress={onToggleLike} style={styles.actionButton}>
-          {liked ? (
+        <Pressable hitSlop={8} onPress={alTocarLike} style={styles.actionButton}>
+          {DiMegusta ? (
             <Ionicons name="heart" size={26} color={Colors.accent} />
           ) : (
             <Feather name="heart" size={24} color={Colors.textPrimary} />
           )}
         </Pressable>
-        <Pressable hitSlop={8} onPress={onPress} style={styles.actionButton}>
+        <Pressable hitSlop={8} onPress={alClickear} style={styles.actionButton}>
           <Feather name="message-circle" size={24} color={Colors.textPrimary} />
         </Pressable>
         <Pressable hitSlop={8} style={styles.actionButton}>
@@ -50,7 +50,7 @@ export function PostCard({ post, liked, likesCount, onToggleLike, onPress }: Pos
         </Pressable>
       </View>
 
-      <Text style={styles.likes}>{likesCount.toLocaleString('es-AR')} Me gusta</Text>
+      <Text style={styles.likes}>{cantidadLikes.toLocaleString('es-AR')} Me gusta</Text>
 
       <Text style={styles.caption}>
         <Text style={styles.username}>{post.username} </Text>
