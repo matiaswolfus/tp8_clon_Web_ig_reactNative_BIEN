@@ -1,13 +1,11 @@
 // Navegación por Stack (pantallas apiladas, con botón de "volver" automático)
 // en vez de la barra de tabs de abajo que usaba antes expo-router con Tabs.
-// Como ya no hay tab bar para ir de Home a Perfil, se agrega un botón en el
-// header de Home (el ícono de usuario) que navega a /profile con router.push.
+// Como ya no hay tab bar para ir de Home a Perfil, el ícono de usuario dentro
+// de components/Header.tsx navega a /profile con router.push.
 
-import { Feather } from '@expo/vector-icons';
 import { DarkTheme, ThemeProvider } from '@react-navigation/native';
-import { router, Stack } from 'expo-router';
+import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { Pressable } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'react-native-reanimated';
 
@@ -26,15 +24,9 @@ export default function RootLayout() {
             }}>
             <Stack.Screen
               name="index"
-              options={{
-                title: 'Home',
-                // Botón para ir al perfil, ocupa el lugar que antes tenía el tab de Perfil.
-                headerRight: () => (
-                  <Pressable onPress={() => router.push('/profile')} hitSlop={8}>
-                    <Feather name="user" size={22} color={Colors.textPrimary} />
-                  </Pressable>
-                ),
-              }}
+              // Home usa su propio header (components/Header.tsx) en vez del nativo del
+              // Stack, así que se oculta acá para no duplicar la barra superior.
+              options={{ headerShown: false }}
             />
             <Stack.Screen name="profile" options={{ title: 'Perfil' }} />
             <Stack.Screen

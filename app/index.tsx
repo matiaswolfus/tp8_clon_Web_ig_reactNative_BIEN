@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import { ActivityIndicator, FlatList, StyleSheet, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { Header } from '@/components/Header';
 import { PostCard } from '@/components/PostCard';
 import Stories from '@/components/Stories';
 import { Colors } from '@/constants/colors';
@@ -14,22 +15,25 @@ export default function FeedScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.centered} edges={['bottom']}>
-        <ActivityIndicator color={Colors.accent} size="large" />
+      <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
+        <Header />
+        <ActivityIndicator color={Colors.accent} size="large" style={styles.centeredIndicator} />
       </SafeAreaView>
     );
   }
 
   if (error) {
     return (
-      <SafeAreaView style={styles.centered} edges={['bottom']}>
+      <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
+        <Header />
         <Text style={styles.errorText}>{error}</Text>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['bottom']}>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
+      <Header />
       <FlatList
         style={styles.list}
         data={posts}
@@ -63,13 +67,13 @@ const styles = StyleSheet.create({
   listContent: {
     paddingBottom: 16,
   },
-  centered: {
+  centeredIndicator: {
     flex: 1,
-    backgroundColor: Colors.bgPrimary,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   errorText: {
+    flex: 1,
     color: Colors.textPrimary,
+    textAlign: 'center',
+    marginTop: 24,
   },
 });

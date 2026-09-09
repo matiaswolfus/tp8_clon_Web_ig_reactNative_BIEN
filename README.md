@@ -56,8 +56,6 @@ Expo Router usa el sistema de archivos como router: cada archivo dentro de `app/
 
 **`components/Stories.tsx`**: fila horizontal de historias (`FlatList horizontal`) con anillo de gradiente (`expo-linear-gradient`). Hace su propio fetch a TheCatAPI (8 imágenes) en un `useEffect` al montarse, independiente del feed y del perfil.
 
-**`components/Header.tsx`**: header alternativo con logo + buscador + iconos, portado del diseño del TP web. **No está montado en ninguna pantalla** — Home usa el header nativo del `Stack` (que ya cubre el requisito de "barra de navegación nativa superior"), y agregar este componente arriba duplicaría la barra. Queda en el repo como referencia de diseño si se quiere reemplazar el header nativo más adelante.
-
 ## Estado: qué vive dónde y con qué hook
 
 **Global (`context/posts-context.tsx`, `PostsProvider`, montado en `_layout.tsx`)**:

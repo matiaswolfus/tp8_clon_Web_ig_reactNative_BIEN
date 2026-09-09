@@ -9,7 +9,8 @@
 // con borde accent, porque el texto completo no entra al lado de los demás iconos.
 
 import { Feather, Ionicons } from '@expo/vector-icons';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { router } from 'expo-router';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { Colors } from '@/constants/colors';
 
@@ -23,11 +24,15 @@ export function Header() {
           <Text style={styles.logoTexto}>Instagram</Text>
         </View>
 
-        {/* Navegación (botones decorativos, sin funcionalidad todavía) */}
+        {/* Navegación. El resto son decorativos (sin funcionalidad todavía);
+            el ícono de usuario navega a /profile, ya que al ocultar el header
+            nativo del Stack para usar este, se pierde el botón que estaba ahí. */}
         <View style={styles.nav}>
           <Feather name="settings" size={20} color={Colors.textSecondary} />
           <Feather name="camera" size={20} color={Colors.textSecondary} />
-          <Feather name="send" size={20} color={Colors.textSecondary} />
+          <Pressable onPress={() => router.push('/profile')} hitSlop={8}>
+            <Feather name="user" size={20} color={Colors.textSecondary} />
+          </Pressable>
           <View style={styles.nuevaPublicacion}>
             <Feather name="plus" size={16} color={Colors.accent} />
           </View>
