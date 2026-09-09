@@ -19,6 +19,7 @@ interface PostsContextValue {
   getPost: (id: string) => Post | undefined;
   toggleLike: (id: string) => void;
   addComment: (id: string, comment: Comment) => void;
+  addPosts: (newPosts: Post[]) => void;
 }
 
 const PostsContext = createContext<PostsContextValue | undefined>(undefined);
@@ -69,9 +70,20 @@ export function PostsProvider({ children }: { children: ReactNode }) {
     );
   }, []);
 
+  // Usado por app/profile.tsx: su fetch a TheCatAPI es independiente del feed,
+  // pero los posts resultantes se suman acá para que app/post/[id].tsx (que solo
+  // conoce el :id de la ruta) pueda encontrarlos con getPost, igual que a los del feed.
+  const addPosts = useCallback((newPosts: Post[]) => {
+    setPosts((current) => {
+      const existingIds = new Set(current.map((post) => post.id));
+      const toAdd = newPosts.filter((post) => !existingIds.has(post.id));
+      return toAdd.length ? [...current, ...toAdd] : current;
+    });
+  }, []);
+
   const value = useMemo<PostsContextValue>(
-    () => ({ posts, loading, error, getPost, toggleLike, addComment }),
-    [posts, loading, error, getPost, toggleLike, addComment]
+    () => ({ posts, loading, error, getPost, toggleLike, addComment, addPosts }),
+    [posts, loading, error, getPost, toggleLike, addComment, addPosts]
   );
 
   return <PostsContext.Provider value={value}>{children}</PostsContext.Provider>;

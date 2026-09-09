@@ -41,7 +41,6 @@ export interface User {
   fullName: string;
   avatar: string;
   bio: string;
-  postsCount: number;
   followersCount: number;
   followingCount: number;
 }

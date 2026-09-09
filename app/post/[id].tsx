@@ -24,6 +24,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { CommentItem } from '@/components/CommentItem';
 import { Colors } from '@/constants/colors';
+import { MAX_CONTENT_WIDTH } from '@/constants/layout';
 import { usePosts } from '@/context/posts-context';
 import { loggedUser } from '@/data/user';
 
@@ -144,6 +145,9 @@ const styles = StyleSheet.create({
   },
   flex: {
     flex: 1,
+    width: '100%',
+    maxWidth: MAX_CONTENT_WIDTH,
+    alignSelf: 'center',
   },
   centered: {
     flex: 1,

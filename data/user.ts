@@ -7,7 +7,6 @@ export const loggedUser: User = {
   fullName: 'facu peri',
   avatar: 'https://i.pravatar.cc/150?img=12',
   bio: '🐱 Cat lover | Buenos Aires',
-  postsCount: 42,
   followersCount: 1380,
   followingCount: 291,
 };
