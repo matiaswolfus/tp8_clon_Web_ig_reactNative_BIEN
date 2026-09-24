@@ -38,7 +38,7 @@ app/
     └── [id].tsx          # Detalle ("/post/:id"), presentado como modal
 ```
 
-Expo Router usa el sistema de archivos como router: cada archivo dentro de `app/` es una pantalla, y `[id].tsx` es una ruta dinámica que recibe el parámetro por `useLocalSearchParams`. No hay bottom tabs: la navegación es un `Stack` (`@react-navigation/native` por debajo), y el acceso a `/profile` se resuelve con un botón en el header nativo de Home (`headerRight`, ver `_layout.tsx`) en vez de una tab bar — decisión tomada porque la consigna solo exige un Stack Navigator o una presentación modal para el detalle, no específicamente tabs.
+Expo Router usa el sistema de archivos como router: cada archivo dentro de `app/` es una pantalla, y `[id].tsx` es una ruta dinámica que recibe el parámetro por `useLocalSearchParams`. No hay bottom tabs: la navegación es un `Stack` (`@react-navigation/native` por debajo), y el acceso a `/profile` se resuelve con el ícono de usuario del header propio de Home (`components/Header.tsx`, que hace `router.push('/profile')`; el header nativo del Stack está oculto en esa pantalla) en vez de una tab bar — decisión tomada porque la consigna solo exige un Stack Navigator o una presentación modal para el detalle, no específicamente tabs.
 
 ## Componentes y su responsabilidad
 
@@ -48,7 +48,9 @@ Expo Router usa el sistema de archivos como router: cada archivo dentro de `app/
 
 **`app/post/[id].tsx` (Detalle)**: se abre como modal (`presentation: 'modal'` en `_layout.tsx`) al tocar un post desde el Home o el Perfil. Lee el `:id` de la ruta con `useLocalSearchParams`, busca el post en `PostsContext` (`getPost`) y renderiza imagen en alta definición, likes interactivos, lista de comentarios (`FlatList`, con la cabecera del post como `ListHeaderComponent`) y un input para publicar un comentario nuevo.
 
-**`app/profile.tsx` (Perfil)**: hace su **propio fetch** a TheCatAPI (independiente del feed, como pide la consigna), trae 6 imágenes y las convierte en posts con el username/avatar del usuario logueado. Los muestra en una grilla con `FlatList numColumns={3}` (no CSS grid, es RN). Cada post del perfil se registra también en `PostsContext` (`addPosts`) para que, al tocarlo, `/post/:id` lo pueda encontrar igual que a los del feed. Incluye avatar, nombre, bio, stats (publicaciones/seguidores/seguidos) y un botón "Editar perfil" sin funcionalidad real (visual, como pide la consigna).
+**`app/profile.tsx` (Perfil)**: hace su **propio fetch** a TheCatAPI (independiente del feed, como pide la consigna), trae 6 imágenes y las convierte en posts con el username/avatar del usuario logueado. Los muestra en una grilla con `FlatList numColumns={3}` (no CSS grid, es RN): cada celda tiene `flex: 1/3` y `aspectRatio: 1`, y `columnWrapperStyle` pone el `gap` solo entre columnas, así quedan tres cuadrados simétricos sin desbordar y sin estilos inline. Cada post del perfil se registra también en `PostsContext` (`addPosts`) para que, al tocarlo, `/post/:id` lo pueda encontrar igual que a los del feed. Incluye avatar, nombre, bio, stats (publicaciones/seguidores/seguidos) y un botón "Editar perfil" sin funcionalidad real (visual, como pide la consigna).
+
+**`components/Header.tsx`**: barra superior propia del Home (logo, íconos y buscador). No recibe props; el ícono de usuario es un `Pressable` que navega a `/profile`.
 
 **`components/PostCard.tsx`**: item de una publicación del feed. Recibe `post`, `DiMegusta` (si el usuario le dio like), `cantidadLikes`, y dos callbacks (`alTocarLike`, `alClickear`) — es un componente **controlado**: no maneja su propio estado de like, así queda sincronizado entre el feed y el detalle a través de `PostsContext`.
 
@@ -71,7 +73,7 @@ Expo Router usa el sistema de archivos como router: cada archivo dentro de `app/
 - `app/post/[id].tsx`: `commentText` (`useState`) para el input controlado de comentario nuevo.
 - `components/Stories.tsx`: `stories`, `loading`, `error` (`useState` + `useEffect`) — fetch propio, no toca el contexto.
 
-**Hooks usados**: `useState` y `useEffect` (fetch al montar en `Stories`, `PostsProvider` y `profile.tsx`), `useContext` (vía `usePosts`), `useCallback`/`useMemo` (en `PostsContext`, para no recrear funciones/objeto de valor en cada render), `useWindowDimensions` (en `profile.tsx`, para calcular el tamaño de cada celda de la grilla de forma reactiva al ancho de pantalla), y los hooks de `expo-router` (`useRouter`, `useLocalSearchParams`).
+**Hooks usados**: `useState` y `useEffect` (fetch al montar en `Stories`, `PostsProvider` y `profile.tsx`), `useContext` (vía `usePosts`), `useCallback`/`useMemo` (en `PostsContext`, para no recrear funciones/objeto de valor en cada render), y los hooks de `expo-router` (`useRouter`, `useLocalSearchParams`).
 
 ## Consumo de la API
 

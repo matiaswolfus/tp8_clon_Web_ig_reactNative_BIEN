@@ -6,6 +6,7 @@
 import { DarkTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'react-native-reanimated';
 
@@ -19,7 +20,7 @@ export default function RootLayout() {
         <ThemeProvider value={DarkTheme}>
           <Stack
             screenOptions={{
-              headerStyle: { backgroundColor: Colors.bgPrimary },
+              headerStyle: styles.header,
               headerTintColor: Colors.textPrimary,
             }}>
             <Stack.Screen
@@ -40,3 +41,9 @@ export default function RootLayout() {
     </SafeAreaProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  header: {
+    backgroundColor: Colors.bgPrimary,
+  },
+});

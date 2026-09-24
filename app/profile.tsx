@@ -15,7 +15,6 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from 'react-native';
 import { Image } from 'expo-image';
@@ -39,10 +38,6 @@ export default function ProfileScreen() {
   const [profilePosts, setProfilePosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const { width: windowWidth } = useWindowDimensions();
-  const contentWidth = Math.min(windowWidth, MAX_CONTENT_WIDTH);
-  const itemSize = (contentWidth - GRID_GAP * (COLUMN_COUNT - 1)) / COLUMN_COUNT;
 
   useEffect(() => {
     let cancelled = false;
@@ -76,14 +71,15 @@ export default function ProfileScreen() {
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
       <FlatList
-        style={{ width: contentWidth, alignSelf: 'center' }}
+        style={styles.list}
         data={profilePosts}
         keyExtractor={(post) => post.id}
         numColumns={COLUMN_COUNT}
+        columnWrapperStyle={styles.gridRow}
         renderItem={({ item }) => (
           <Pressable
             onPress={() => router.push(`/post/${item.id}`)}
-            style={[styles.gridItem, { width: itemSize, height: itemSize }]}>
+            style={styles.gridItem}>
             <Image source={{ uri: item.imageUrl }} style={styles.gridImage} contentFit="cover" />
           </Pressable>
         )}
@@ -207,9 +203,21 @@ const styles = StyleSheet.create({
     marginTop: 16,
     textAlign: 'center',
   },
-  gridItem: {
-    marginRight: GRID_GAP,
+  list: {
+    width: '100%',
+    maxWidth: MAX_CONTENT_WIDTH,
+    alignSelf: 'center',
+  },
+  // gap solo entre columnas (no en los bordes) y cada celda con flex 1/3 +
+  // aspectRatio 1: tres cuadrados simétricos que ocupan exacto el ancho, sin
+  // calcular píxeles con useWindowDimensions ni pasar estilos inline.
+  gridRow: {
+    gap: GRID_GAP,
     marginBottom: GRID_GAP,
+  },
+  gridItem: {
+    flex: 1 / COLUMN_COUNT,
+    aspectRatio: 1,
   },
   gridImage: {
     width: '100%',

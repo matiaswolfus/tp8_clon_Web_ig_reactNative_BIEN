@@ -91,7 +91,7 @@ export default function PostDetailScreen() {
 
               <Image
                 source={{ uri: post.imageUrl }}
-                style={[styles.image, { aspectRatio: post.width / post.height }]}
+                style={styles.image}
                 contentFit="cover"
               />
 
@@ -196,8 +196,11 @@ const styles = StyleSheet.create({
     fontSize: 11,
     marginTop: 1,
   },
+  // Cuadrado fijo como en el feed (Instagram recorta a 1:1 por defecto), así
+  // el estilo queda estático en StyleSheet en vez de calcularse por imagen.
   image: {
     width: '100%',
+    aspectRatio: 1,
     backgroundColor: Colors.bgCard,
   },
   actions: {
